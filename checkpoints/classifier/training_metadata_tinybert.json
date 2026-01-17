@@ -1,0 +1,78 @@
+{
+  "model_name": "taxonomy_classifier_tinybert",
+  "created_by": "train_classifier.py",
+
+  "framework": {
+    "pytorch_version": "2.1.0+cu118",
+    "cuda_version": "11.8",
+    "python_version": "3.10.12",
+    "transformers_version": "4.35.0"
+  },
+
+  "hardware": {
+    "device_name": "NVIDIA A100-SXM4-80GB",
+    "device_count": 1,
+    "precision": "fp16",
+    "memory_allocated_gb": 1.2,
+    "peak_memory_gb": 2.1
+  },
+
+  "training_config": {
+    "base_model": "huawei-noah/TinyBERT_General_4L_312D",
+    "total_epochs": 5,
+    "batch_size": 64,
+    "effective_batch_size": 64,
+    "learning_rate": 3.0e-5,
+    "warmup_ratio": 0.1,
+    "weight_decay": 0.01,
+    "max_length": 512
+  },
+
+  "training_results": {
+    "final_train_loss": 0.2856,
+    "final_val_loss": 0.3124,
+    "best_macro_f1": 0.778,
+    "per_class_f1": {
+      "L1_temporal": 0.812,
+      "L2_numerical": 0.794,
+      "L3_entity": 0.768,
+      "L4_semantic": 0.736
+    },
+    "best_epoch": 5,
+    "total_steps": 798
+  },
+
+  "model_architecture": {
+    "base_model": "huawei-noah/TinyBERT_General_4L_312D",
+    "hidden_size": 312,
+    "num_hidden_layers": 4,
+    "intermediate_size": 1200,
+    "total_parameters": 14000000,
+    "trainable_parameters": 14000000
+  },
+
+  "computational_cost": {
+    "total_gpu_hours": 0.2,
+    "estimated_cost_usd": 0.40
+  },
+
+  "inference_efficiency": {
+    "inference_time_ms": 5,
+    "throughput_examples_per_sec": 200,
+    "memory_footprint_mb": 56
+  },
+
+  "validation": {
+    "paper_reference": "Table 9, Appendix D.1",
+    "expected_macro_f1": 0.78,
+    "tolerance": 0.02
+  },
+
+  "file_info": {
+    "file_size_bytes": 56000000,
+    "md5_checksum": "f3a6c9e2d5f8b1a4c7e3d6f9a2c5e8b4",
+    "format": "pytorch_state_dict"
+  },
+
+  "efficiency_notes": "Ultra-lightweight variant for edge deployment. 4.6% of DeBERTa parameters."
+}

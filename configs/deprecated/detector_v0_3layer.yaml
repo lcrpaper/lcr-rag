@@ -1,0 +1,67 @@
+_metadata:
+  status: "DEPRECATED"
+  deprecated_reason: "Overfitting - see experiments/runs/initial_detector/"
+  successor: "configs/detector_config.yaml"
+
+model:
+  name: "ConflictDetector_v0"
+  architecture: "3-layer MLP"
+
+  layers:
+    - name: "fc1"
+      in_features: 4096
+      out_features: 1024
+      activation: "relu"
+      dropout: 0.1
+
+    - name: "fc2"
+      in_features: 1024
+      out_features: 256
+      activation: "relu"
+      dropout: 0.1
+
+    - name: "fc3"
+      in_features: 256
+      out_features: 1
+      activation: "sigmoid"
+      dropout: 0.0
+
+  total_parameters: 5439489
+
+  pooling: "mean"
+
+training:
+  batch_size: 32
+  learning_rate: 1.0e-4
+  weight_decay: 0.01
+  optimizer: "adamw"
+  scheduler: "cosine"
+  warmup_steps: 0
+  max_epochs: 50
+  early_stopping_patience: 10
+  gradient_clip: null
+
+  seed: 12345
+
+data:
+  train_split: 0.8
+  val_split: 0.1
+  test_split: 0.1
+
+  augmentation: false
+
+  natural_only: true
+
+results:
+  train_f1: 0.94
+  val_f1: 0.71
+  test_f1: 0.68
+  overfitting_gap: 0.26
+
+  notes: |
+    Severe overfitting observed:
+    - Training F1 continued to increase while validation plateaued
+    - Model memorizing training patterns
+    - High capacity (5.4M params) likely cause
+
+    Decision: Reduce architecture to 2 layers, decrease hidden dim

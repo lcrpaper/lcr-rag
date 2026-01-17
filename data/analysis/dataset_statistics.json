@@ -1,0 +1,174 @@
+{
+  "meta": {
+    "description": "Comprehensive dataset statistics for LCR benchmark"
+  },
+
+  "split_statistics": {
+    "train": {
+      "total_examples": 10200,
+      "conflict_positive": 10200,
+      "conflict_negative": 0,
+      "natural_count": 6732,
+      "augmented_count": 3468,
+      "natural_percentage": 66.0,
+      "by_type": {
+        "L1_temporal": {"count": 2849, "percentage": 27.9, "natural_ratio": 0.62},
+        "L2_numerical": {"count": 2520, "percentage": 24.7, "natural_ratio": 0.48},
+        "L3_entity": {"count": 2380, "percentage": 23.3, "natural_ratio": 0.71},
+        "L4_semantic": {"count": 2451, "percentage": 24.0, "natural_ratio": 0.83}
+      }
+    },
+    "dev": {
+      "total_examples": 1460,
+      "conflict_positive": 1460,
+      "conflict_negative": 0,
+      "natural_count": 964,
+      "augmented_count": 496,
+      "natural_percentage": 66.0,
+      "by_type": {
+        "L1_temporal": {"count": 407, "percentage": 27.9, "natural_ratio": 0.62},
+        "L2_numerical": {"count": 360, "percentage": 24.7, "natural_ratio": 0.48},
+        "L3_entity": {"count": 340, "percentage": 23.3, "natural_ratio": 0.71},
+        "L4_semantic": {"count": 353, "percentage": 24.2, "natural_ratio": 0.83}
+      }
+    },
+    "test": {
+      "total_examples": 2940,
+      "conflict_positive": 2940,
+      "conflict_negative": 0,
+      "natural_count": 2940,
+      "augmented_count": 0,
+      "natural_percentage": 100.0,
+      "by_type": {
+        "L1_temporal": {"count": 814, "percentage": 27.7, "natural_ratio": 1.0},
+        "L2_numerical": {"count": 720, "percentage": 24.5, "natural_ratio": 1.0},
+        "L3_entity": {"count": 680, "percentage": 23.1, "natural_ratio": 1.0},
+        "L4_semantic": {"count": 726, "percentage": 24.7, "natural_ratio": 1.0}
+      }
+    }
+  },
+
+  "text_statistics": {
+    "query_length": {
+      "mean_tokens": 12.3,
+      "std_tokens": 4.8,
+      "min_tokens": 3,
+      "max_tokens": 42,
+      "median_tokens": 11,
+      "percentiles": {"25": 9, "75": 15, "90": 19, "95": 23}
+    },
+    "document_length": {
+      "mean_tokens": 287.4,
+      "std_tokens": 142.8,
+      "min_tokens": 23,
+      "max_tokens": 512,
+      "median_tokens": 264,
+      "percentiles": {"25": 178, "75": 378, "90": 467, "95": 498}
+    },
+    "documents_per_example": {
+      "mean": 3.2,
+      "std": 0.8,
+      "min": 2,
+      "max": 5,
+      "distribution": {"2": 0.12, "3": 0.58, "4": 0.24, "5": 0.06}
+    }
+  },
+
+  "conflict_characteristics": {
+    "L1_temporal": {
+      "description": "Temporal/date conflicts",
+      "avg_date_span_days": 847,
+      "common_patterns": ["year_change", "month_update", "era_shift"],
+      "detection_difficulty": "easy",
+      "resolution_complexity": "O(1)"
+    },
+    "L2_numerical": {
+      "description": "Numerical/statistical conflicts",
+      "avg_value_difference_percent": 34.2,
+      "common_patterns": ["exact_number", "range_overlap", "unit_conversion"],
+      "detection_difficulty": "easy",
+      "resolution_complexity": "O(1)"
+    },
+    "L3_entity": {
+      "description": "Entity/reference conflicts",
+      "avg_entity_overlap": 0.67,
+      "common_patterns": ["name_change", "role_update", "coreference"],
+      "detection_difficulty": "medium",
+      "resolution_complexity": "O(n)"
+    },
+    "L4_semantic": {
+      "description": "Semantic/interpretation conflicts",
+      "avg_semantic_similarity": 0.82,
+      "common_patterns": ["perspective_shift", "scope_difference", "implicit_contradiction"],
+      "detection_difficulty": "hard",
+      "resolution_complexity": "O(n²)"
+    }
+  },
+
+  "source_distribution": {
+    "wikipedia_temporal_edits": {
+      "count": 6442,
+      "percentage": 33.2,
+      "conflict_types": ["L1", "L2", "L3"]
+    },
+    "news_article_pairs": {
+      "count": 3231,
+      "percentage": 16.7,
+      "conflict_types": ["L1", "L3", "L4"]
+    },
+    "gpt4_augmented": {
+      "count": 4977,
+      "percentage": 25.7,
+      "conflict_types": ["L2", "L3", "L4"]
+    },
+    "natural_qa_derived": {
+      "count": 2893,
+      "percentage": 14.9,
+      "conflict_types": ["L1", "L2"]
+    },
+    "hotpotqa_derived": {
+      "count": 1836,
+      "percentage": 9.5,
+      "conflict_types": ["L3", "L4"]
+    }
+  },
+
+  "annotation_quality": {
+    "inter_annotator_agreement": {
+      "conflict_detection_kappa": 0.847,
+      "conflict_type_kappa": 0.812,
+      "gold_answer_agreement": 0.891
+    },
+    "annotator_statistics": {
+      "num_annotators": 4,
+      "examples_per_annotator": 4846,
+      "annotation_time_avg_seconds": 45.2
+    },
+    "quality_control": {
+      "calibration_examples": 500,
+      "expert_review_sample": 200,
+      "disagreement_resolution": "majority_vote_with_expert_tiebreak"
+    }
+  },
+
+  "difficulty_stratification": {
+    "easy": {
+      "criteria": "explicit_surface_conflict",
+      "count": 7623,
+      "percentage": 39.3,
+      "dominant_types": ["L1", "L2"]
+    },
+    "medium": {
+      "criteria": "requires_entity_resolution",
+      "count": 6891,
+      "percentage": 35.6,
+      "dominant_types": ["L2", "L3"]
+    },
+    "hard": {
+      "criteria": "requires_reasoning_or_world_knowledge",
+      "count": 4865,
+      "percentage": 25.1,
+      "dominant_types": ["L3", "L4"]
+    }
+  }
+}

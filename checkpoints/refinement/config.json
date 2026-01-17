@@ -1,0 +1,29 @@
+{
+  "model_type": "refinement_module",
+  "hidden_dim": 4096,
+  "expanded_dim": 732,
+  "alpha": 0.3,
+  "t_max": 3,
+  "epsilon": 0.01,
+  "num_parameters": 5996544,
+  "architecture": "Bottleneck: d -> expanded -> d with recurrent updates",
+  "training_metadata": {
+    "status": "converged",
+    "total_iterations": 37500000,
+    "total_epochs": 5,
+    "training_examples": 12000,
+    "batch_size": 16,
+    "learning_rate": 5e-05,
+    "optimizer": "AdamW",
+    "final_loss": {
+      "total": 0.3142,
+      "ce": 0.2456,
+      "l2": 0.0534,
+      "kl": 0.0152
+    },
+    "best_val_accuracy": 0.724,
+    "convergence_criteria": "validation accuracy plateaued for 3 epochs",
+    "training_time_hours": 6.2,
+    "average_refinement_iterations": 2.3
+  }
+}

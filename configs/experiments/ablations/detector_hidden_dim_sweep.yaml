@@ -1,0 +1,25 @@
+_schema_version: "1.0"
+_config_type: "ablation"
+_extends: "configs/base/detector_base.yaml"
+
+experiment:
+  name: "detector_hidden_dim_sweep"
+  description: "Sweep over detector hidden dimensions to find optimal capacity"
+  hypothesis: "Larger hidden dimension improves accuracy but with diminishing returns"
+
+sweep:
+  method: "grid"
+  metric:
+    name: "val_f1"
+    goal: "maximize"
+
+  parameters:
+    model.architecture.hidden_dim:
+      values: [512, 1024, 2048, 4096, 8192, 16384]
+
+    training.optimizer.lr:
+      value: 2.0e-5
+    training.epochs:
+      value: 3
+    reproducibility.seed:
+      value: 42

@@ -1,0 +1,151 @@
+_schema_version: "1.0"
+_config_type: "ablation"
+_extends: null
+
+experiment:
+  name: "classifier_architecture_comparison"
+  description: "Compare different classifier architectures for conflict taxonomy"
+
+architectures:
+  deberta_v3_large:
+    base_model: "microsoft/deberta-v3-large"
+    num_labels: 4
+    hidden_size: 1024
+    num_layers: 24
+    params: "304M"
+    status: "paper_primary"
+
+  distilbert_base:
+    base_model: "distilbert-base-uncased"
+    num_labels: 4
+    hidden_size: 768
+    num_layers: 6
+    params: "66M"
+    status: "paper_efficient"
+
+  tinybert:
+    base_model: "huawei-noah/TinyBERT_General_4L_312D"
+    num_labels: 4
+    hidden_size: 312
+    num_layers: 4
+    params: "14M"
+    status: "paper_lightweight"
+
+  roberta_base:
+    base_model: "roberta-base"
+    num_labels: 4
+    hidden_size: 768
+    num_layers: 12
+    params: "125M"
+    status: "explored_not_used"
+    notes: "Original baseline, replaced by DeBERTa"
+
+  roberta_large:
+    base_model: "roberta-large"
+    num_labels: 4
+    hidden_size: 1024
+    num_layers: 24
+    params: "355M"
+    status: "explored_not_used"
+    notes: "Similar to DeBERTa but worse on our task"
+
+  bert_base:
+    base_model: "bert-base-uncased"
+    num_labels: 4
+    hidden_size: 768
+    num_layers: 12
+    params: "110M"
+    status: "explored_not_used"
+    notes: "Baseline comparison"
+
+  albert_base:
+    base_model: "albert-base-v2"
+    num_labels: 4
+    hidden_size: 768
+    num_layers: 12
+    params: "12M"
+    status: "explored_not_used"
+    notes: "Parameter efficient but lower accuracy"
+
+  electra_base:
+    base_model: "google/electra-base-discriminator"
+    num_labels: 4
+    hidden_size: 768
+    num_layers: 12
+    params: "110M"
+    status: "explored_not_used"
+    notes: "Good efficiency but training was unstable"
+
+  llama_classifier:
+    base_model: "meta-llama/Llama-3-8B"
+    num_labels: 4
+    approach: "last_token_classification"
+    params: "8B (frozen) + 4K (classifier)"
+    status: "experimental_not_used"
+    notes: "Too slow for cascade routing"
+
+training:
+  common:
+    epochs: 5
+    optimizer: "adamw"
+    scheduler: "linear"
+    warmup_ratio: 0.06
+
+  per_architecture:
+    deberta_v3_large:
+      lr: 1.0e-5
+      batch_size: 16
+      gradient_accumulation: 2
+
+    distilbert_base:
+      lr: 2.0e-5
+      batch_size: 32
+      gradient_accumulation: 1
+
+    tinybert:
+      lr: 3.0e-5
+      batch_size: 64
+      gradient_accumulation: 1
+
+    roberta_base:
+      lr: 2.0e-5
+      batch_size: 32
+      gradient_accumulation: 1
+
+results:
+  deberta_v3_large:
+    macro_f1: 0.889
+    l1_f1: 0.921
+    l2_f1: 0.904
+    l3_f1: 0.872
+    l4_f1: 0.859
+    inference_ms: 42
+    training_hours: 3.0
+
+  distilbert_base:
+    macro_f1: 0.847
+    l1_f1: 0.879
+    l2_f1: 0.861
+    l3_f1: 0.834
+    l4_f1: 0.816
+    inference_ms: 12
+    training_hours: 0.5
+
+  tinybert:
+    macro_f1: 0.778
+    l1_f1: 0.812
+    l2_f1: 0.794
+    l3_f1: 0.768
+    l4_f1: 0.736
+    inference_ms: 5
+    training_hours: 0.2
+
+  roberta_base:
+    macro_f1: 0.823
+    l1_f1: 0.852
+    l2_f1: 0.831
+    l3_f1: 0.814
+    l4_f1: 0.796
+    inference_ms: 18
+    training_hours: 1.5
+    notes: "Original paper baseline"

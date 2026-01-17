@@ -1,0 +1,132 @@
+default_language_version:
+  python: python3.10
+
+exclude: |
+  (?x)^(
+    _backup/.*|
+    sample/.*|
+    \.git/.*|
+    \.venv/.*|
+    __pycache__/.*|
+    \.egg-info/.*|
+    build/.*|
+    dist/.*|
+    checkpoints/.*\.pt|
+    data/.*\.jsonl
+  )$
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: \.md$
+      - id: end-of-file-fixer
+        exclude: \.md$
+      - id: check-yaml
+        args: [--unsafe]
+      - id: check-json
+      - id: check-toml
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+        exclude: |
+          (?x)^(
+            checkpoints/.*|
+            data/.*|
+            .*\.pdf
+          )$
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: detect-private-key
+      - id: check-executables-have-shebangs
+      - id: check-shebang-scripts-are-executable
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: no-commit-to-branch
+        args: [--branch, main, --branch, master]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.9
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+        types_or: [python, pyi]
+      - id: ruff-format
+        types_or: [python, pyi]
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.8.0
+    hooks:
+      - id: mypy
+        additional_dependencies:
+          - types-PyYAML
+          - types-requests
+          - types-tqdm
+        args:
+          - --ignore-missing-imports
+          - --no-strict-optional
+        exclude: |
+          (?x)^(
+            tests/.*|
+            scripts/.*|
+            notebooks/.*
+          )$
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.6
+    hooks:
+      - id: bandit
+        args: [-c, pyproject.toml, -r]
+        additional_dependencies: ["bandit[toml]"]
+        exclude: |
+          (?x)^(
+            tests/.*|
+            scripts/.*
+          )$
+
+  - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+    rev: v2.12.0
+    hooks:
+      - id: pretty-format-yaml
+        args:
+          - --autofix
+          - --preserve-quotes
+          - --indent=2
+        exclude: |
+          (?x)^(
+            docker-compose\.yml|
+            \.pre-commit-config\.yaml
+          )$
+
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.38.0
+    hooks:
+      - id: markdownlint
+        args: [--fix, --disable, MD013, MD033, MD041, --]
+        exclude: |
+          (?x)^(
+            CHANGELOG\.md|
+            docs/.*
+          )$
+
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.6.1
+    hooks:
+      - id: nbstripout
+        files: \.ipynb$
+
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v3.13.0
+    hooks:
+      - id: commitizen
+        stages: [commit-msg]
+
+ci:
+  autofix_commit_msg: |
+    [pre-commit.ci] auto fixes from pre-commit hooks
+  autofix_prs: true
+  autoupdate_branch: 'main'
+  autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
+  autoupdate_schedule: weekly
+  skip: [mypy]
+  submodules: false

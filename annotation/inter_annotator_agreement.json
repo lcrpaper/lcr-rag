@@ -1,0 +1,139 @@
+{
+  "study_metadata": {
+    "study_name": "LCR Conflict Annotation IAA Study",
+    "total_annotators": 5,
+    "annotator_ids": ["ann_01", "ann_02", "ann_03", "ann_04", "ann_05"],
+    "total_examples_annotated": 500,
+    "double_annotated_examples": 200,
+    "triple_annotated_examples": 50
+  },
+  "conflict_detection_binary": {
+    "task_description": "Binary classification: conflict present vs no conflict",
+    "cohens_kappa": 0.83,
+    "fleiss_kappa": 0.81,
+    "percent_agreement": 0.91,
+    "confusion_matrix": {
+      "true_positive": 156,
+      "true_negative": 26,
+      "false_positive": 8,
+      "false_negative": 10
+    },
+    "per_annotator_agreement": {
+      "ann_01_vs_ann_02": 0.88,
+      "ann_01_vs_ann_03": 0.85,
+      "ann_02_vs_ann_03": 0.84,
+      "ann_01_vs_ann_04": 0.82,
+      "ann_02_vs_ann_04": 0.80
+    }
+  },
+  "conflict_type_classification": {
+    "task_description": "4-class classification: L1, L2, L3, L4",
+    "cohens_kappa": 0.78,
+    "fleiss_kappa": 0.76,
+    "percent_agreement": 0.84,
+    "per_class_agreement": {
+      "L1_temporal": {
+        "kappa": 0.85,
+        "agreement": 0.91,
+        "n_examples": 52
+      },
+      "L2_numerical": {
+        "kappa": 0.82,
+        "agreement": 0.88,
+        "n_examples": 48
+      },
+      "L3_entity": {
+        "kappa": 0.74,
+        "agreement": 0.82,
+        "n_examples": 55
+      },
+      "L4_semantic": {
+        "kappa": 0.68,
+        "agreement": 0.76,
+        "n_examples": 45
+      }
+    },
+    "confusion_matrix_multiclass": {
+      "L1_predicted_as_L1": 47,
+      "L1_predicted_as_L2": 3,
+      "L1_predicted_as_L3": 1,
+      "L1_predicted_as_L4": 1,
+      "L2_predicted_as_L1": 2,
+      "L2_predicted_as_L2": 42,
+      "L2_predicted_as_L3": 2,
+      "L2_predicted_as_L4": 2,
+      "L3_predicted_as_L1": 1,
+      "L3_predicted_as_L2": 3,
+      "L3_predicted_as_L3": 45,
+      "L3_predicted_as_L4": 6,
+      "L4_predicted_as_L1": 0,
+      "L4_predicted_as_L2": 1,
+      "L4_predicted_as_L3": 8,
+      "L4_predicted_as_L4": 36
+    }
+  },
+  "common_disagreements": [
+    {
+      "pattern": "L3 vs L4 confusion",
+      "frequency": 14,
+      "description": "Entity conflicts with interpretive elements were often labeled as either L3 or L4",
+      "resolution": "Added clarification in guidelines: concrete entity disagreements -> L3, abstract interpretive claims -> L4"
+    },
+    {
+      "pattern": "L1 vs L2 for time-varying numbers",
+      "frequency": 5,
+      "description": "Statistics that change over time (e.g., population) sometimes labeled as temporal, sometimes numerical",
+      "resolution": "Guidelines specify: if temporal markers present -> L1, if comparing precision without temporal context -> L2"
+    },
+    {
+      "pattern": "Borderline conflict detection",
+      "frequency": 8,
+      "description": "Minor discrepancies (rounding, paraphrasing) sometimes marked as conflicts",
+      "resolution": "Added threshold guidance: conflict must affect answer reliability"
+    }
+  ],
+  "annotator_performance": {
+    "ann_01": {
+      "total_annotations": 180,
+      "avg_time_per_annotation_sec": 72,
+      "agreement_with_gold": 0.87,
+      "bias_notes": "Tends to classify more conflicts as L4"
+    },
+    "ann_02": {
+      "total_annotations": 165,
+      "avg_time_per_annotation_sec": 58,
+      "agreement_with_gold": 0.89,
+      "bias_notes": "Slightly conservative in conflict detection"
+    },
+    "ann_03": {
+      "total_annotations": 155,
+      "avg_time_per_annotation_sec": 85,
+      "agreement_with_gold": 0.86,
+      "bias_notes": "Higher confidence scores on average"
+    },
+    "ann_04": {
+      "total_annotations": 120,
+      "avg_time_per_annotation_sec": 68,
+      "agreement_with_gold": 0.84,
+      "bias_notes": "New annotator, learning curve visible in early batches"
+    },
+    "ann_05": {
+      "total_annotations": 80,
+      "avg_time_per_annotation_sec": 75,
+      "agreement_with_gold": 0.85,
+      "bias_notes": "Part-time annotator, consistent quality"
+    }
+  },
+  "quality_control_metrics": {
+    "attention_check_pass_rate": 0.96,
+    "gold_standard_accuracy": 0.88,
+    "avg_annotation_time_sec": 71.6,
+    "annotations_per_hour": 50.3,
+    "rejection_rate": 0.02
+  },
+  "temporal_analysis": {
+    "batches_completed": 10,
+    "agreement_trend": [0.78, 0.80, 0.82, 0.81, 0.84, 0.85, 0.83, 0.86, 0.84, 0.86],
+    "notes": "Agreement improved after guideline clarifications in batch 3"
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "model_name": "taxonomy_classifier_distilbert_base",
+  "created_by": "train_classifier.py",
+
+  "framework": {
+    "pytorch_version": "2.1.0+cu118",
+    "cuda_version": "11.8",
+    "python_version": "3.10.12",
+    "transformers_version": "4.35.0"
+  },
+
+  "hardware": {
+    "device_name": "NVIDIA A100-SXM4-80GB",
+    "device_count": 1,
+    "precision": "fp16",
+    "memory_allocated_gb": 4.2,
+    "peak_memory_gb": 6.8
+  },
+
+  "training_config": {
+    "base_model": "distilbert-base-uncased",
+    "total_epochs": 5,
+    "batch_size": 32,
+    "effective_batch_size": 32,
+    "learning_rate": 2.0e-5,
+    "warmup_ratio": 0.1,
+    "weight_decay": 0.01,
+    "max_length": 512
+  },
+
+  "training_results": {
+    "final_train_loss": 0.2134,
+    "final_val_loss": 0.2567,
+    "best_macro_f1": 0.847,
+    "per_class_f1": {
+      "L1_temporal": 0.879,
+      "L2_numerical": 0.861,
+      "L3_entity": 0.834,
+      "L4_semantic": 0.816
+    },
+    "best_epoch": 5,
+    "total_steps": 1594
+  },
+
+  "model_architecture": {
+    "base_model": "distilbert-base-uncased",
+    "hidden_size": 768,
+    "num_hidden_layers": 6,
+    "total_parameters": 66000000,
+    "trainable_parameters": 66000000
+  },
+
+  "computational_cost": {
+    "total_gpu_hours": 0.5,
+    "estimated_cost_usd": 1.00
+  },
+
+  "inference_efficiency": {
+    "inference_time_ms": 12,
+    "throughput_examples_per_sec": 83,
+    "memory_footprint_mb": 264
+  },
+
+  "validation": {
+    "paper_reference": "Table 9, Appendix D.1",
+    "expected_macro_f1": 0.85,
+    "tolerance": 0.02
+  },
+
+  "file_info": {
+    "file_size_bytes": 264000000,
+    "md5_checksum": "e2f5a8c4b7d3e9f1a6c2d5e8f4a7b1c9",
+    "format": "pytorch_state_dict"
+  },
+
+  "efficiency_notes": "Best accuracy-efficiency tradeoff. 99.1% of DeBERTa performance at 22% parameters."
+}

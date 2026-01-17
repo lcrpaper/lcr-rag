@@ -1,0 +1,146 @@
+_config_type: "detector_base"
+_parent: null
+
+model:
+  name: "conflict_detector"
+
+  architecture:
+    type: "mlp"
+    num_layers: 2
+    input_dim: 4096
+    hidden_dim: 8192
+    output_dim: 1
+    activation: "relu"
+    use_bias: true
+
+  regularization:
+    dropout: 0.1
+    weight_decay: 0.01
+    use_layer_norm: false
+    use_batch_norm: false
+
+  output:
+    activation: "sigmoid"
+    threshold: 0.6
+
+  initialization:
+    method: "kaiming_uniform"
+    gain: 1.0
+    bias_init: "zeros"
+
+training:
+  optimizer:
+    name: "adamw"
+    lr: 2.0e-5
+    betas: [0.9, 0.999]
+    eps: 1.0e-8
+    weight_decay: 0.01
+
+  scheduler:
+    name: "cosine"
+    warmup_ratio: 0.1
+    min_lr: 1.0e-7
+    num_cycles: 1
+
+  batch:
+    train_batch_size: 32
+    eval_batch_size: 64
+    gradient_accumulation_steps: 2
+
+  epochs: 3
+  max_steps: null
+
+  gradient:
+    max_norm: 1.0
+    clip_type: "norm"
+
+  precision:
+    enabled: true
+    dtype: "float16"
+    amp_backend: "native"
+
+  checkpoint:
+    save_every_n_steps: 500
+    save_total_limit: 3
+    save_best_only: false
+    monitor_metric: "val_f1"
+    monitor_mode: "max"
+
+data:
+  train_path: "data/train/"
+  val_path: "data/dev/"
+  test_path: "data/test/"
+
+  preprocessing:
+    max_length: 2048
+    truncation: "right"
+    padding: "max_length"
+
+  sampling:
+    shuffle: true
+    seed: 42
+    conflict_ratio: null
+
+  dataloader:
+    num_workers: 4
+    pin_memory: true
+    prefetch_factor: 2
+    persistent_workers: true
+
+evaluation:
+  metrics:
+    - "f1"
+    - "precision"
+    - "recall"
+    - "accuracy"
+    - "auroc"
+    - "auprc"
+
+  threshold_tuning:
+    enabled: false
+    search_range: [0.3, 0.8]
+    num_thresholds: 50
+
+  per_class: true
+
+logging:
+  console:
+    level: "INFO"
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+  file:
+    enabled: true
+    path: "logs/detector_training.log"
+    level: "DEBUG"
+
+  tracking:
+    wandb:
+      enabled: false
+      project: "lcr-detector"
+      entity: null
+      tags: []
+
+    tensorboard:
+      enabled: true
+      log_dir: "runs/detector"
+
+    mlflow:
+      enabled: false
+      tracking_uri: null
+      experiment_name: "detector"
+
+  log_every_n_steps: 50
+  eval_every_n_steps: 100
+
+reproducibility:
+  seed: 42
+  deterministic: true
+  benchmark: false
+
+hardware:
+  device: "cuda"
+  device_ids: null
+  distributed:
+    enabled: false
+    backend: "nccl"
+    world_size: 1

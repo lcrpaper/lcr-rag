@@ -1,0 +1,59 @@
+_metadata:
+  status: "DEPRECATED"
+  deprecated_reason: "Single-pass insufficient - iterative refinement needed"
+  successor: "configs/refinement_config.yaml"
+
+model:
+  name: "RefinementModule_v0"
+  architecture: "single_pass_bottleneck"
+
+  hidden_dim: 4096
+  bottleneck_dim: 512
+
+  num_iterations: 1
+  alpha: null
+
+  activation: "relu"
+
+  epsilon: null
+
+  total_parameters: 4194304
+
+training:
+  batch_size: 32
+  learning_rate: 5.0e-5
+  weight_decay: 0.01
+  optimizer: "adamw"
+  scheduler: "cosine"
+  max_epochs: 20
+
+  loss:
+    type: "cross_entropy"
+    kl_weight: 0.0
+    l2_weight: 0.01
+
+  seed: 12345
+
+results:
+  overall_accuracy: 0.601
+
+  by_conflict_type:
+    L1_temporal: 0.656
+    L2_numerical: 0.634
+    L3_entity: 0.567
+    L4_semantic: 0.547
+
+  comparison_with_v1:
+    L1_improvement: "+6.8%"
+    L2_improvement: "+6.7%"
+    L3_improvement: "+3.0%"
+    L4_improvement: "+3.1%"
+
+  notes: |
+    Single-pass refinement shows clear limitations:
+    - Reasonable on simpler conflicts (L1/L2)
+    - Poor on complex conflicts requiring reasoning (L3/L4)
+    - No ability to "reconsider" initial refinement
+
+    The 4.9% overall accuracy gain from iterative refinement
+    justified the additional compute cost.

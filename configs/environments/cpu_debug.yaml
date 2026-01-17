@@ -1,0 +1,67 @@
+_schema_version: "1.0"
+_config_type: "environment"
+_extends: null
+
+hardware:
+  name: "cpu_debug"
+  description: "CPU-only mode for debugging and testing"
+
+  device: "cpu"
+  device_count: 0
+
+  cpu:
+    cores: 8
+    threads: 16
+
+  memory:
+    system_ram_gb: 32
+
+debug:
+  enabled: true
+
+  max_samples:
+    train: 100
+    val: 50
+    test: 50
+
+  model_overrides:
+    detector:
+      hidden_dim: 256
+    refinement:
+      bottleneck_dim: 64
+
+  training_overrides:
+    epochs: 1
+    max_steps: 50
+    eval_steps: 10
+    log_steps: 5
+
+  profiling:
+    enabled: false
+    trace_file: "debug_trace.json"
+
+optimizations:
+  precision:
+    training: "float32"
+    inference: "float32"
+    amp_enabled: false
+
+  batch_overrides:
+    detector:
+      train_batch_size: 4
+      gradient_accumulation_steps: 1
+    refinement:
+      train_batch_size: 2
+      gradient_accumulation_steps: 1
+    classifier:
+      train_batch_size: 2
+      gradient_accumulation_steps: 1
+
+  torch_compile:
+    enabled: false
+
+data:
+  num_workers: 0
+  pin_memory: false
+  prefetch_factor: null
+  persistent_workers: false

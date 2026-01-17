@@ -1,0 +1,56 @@
+_schema_version: "1.0"
+_config_type: "environment"
+_extends: null
+
+hardware:
+  name: "local_rtx3090"
+  description: "Single NVIDIA RTX 3090 (24GB VRAM)"
+
+  device: "cuda:0"
+  device_count: 1
+
+  gpu:
+    name: "NVIDIA GeForce RTX 3090"
+    memory_gb: 24
+    compute_capability: "8.6"
+    tensor_cores: true
+
+  cpu:
+    cores: 16
+    threads: 32
+
+  memory:
+    system_ram_gb: 64
+    swap_gb: 32
+
+optimizations:
+  memory:
+    gradient_checkpointing: true
+    cpu_offload: false
+    activation_checkpointing: true
+
+  precision:
+    training: "float16"
+    inference: "float16"
+    amp_enabled: true
+    amp_opt_level: "O2"
+
+  batch_overrides:
+    detector:
+      train_batch_size: 16
+      gradient_accumulation_steps: 4
+    refinement:
+      train_batch_size: 8
+      gradient_accumulation_steps: 8
+    classifier:
+      train_batch_size: 8
+
+  torch_compile:
+    enabled: false
+    mode: "default"
+
+data:
+  num_workers: 4
+  pin_memory: true
+  prefetch_factor: 2
+  persistent_workers: false

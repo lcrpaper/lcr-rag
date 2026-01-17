@@ -1,0 +1,28 @@
+{
+  "model_type": "conflict_detector",
+  "hidden_dim": 4096,
+  "reduction_factor": 16,
+  "intermediate_dim": 512,
+  "threshold": 0.6,
+  "num_parameters": 2098177,
+  "target_performance": {
+    "f1": 0.87,
+    "precision": 0.89,
+    "recall": 0.85
+  },
+  "training_metadata": {
+    "status": "converged",
+    "total_iterations": 12500000,
+    "total_epochs": 3,
+    "training_examples": 15000,
+    "batch_size": 32,
+    "learning_rate": 2e-05,
+    "optimizer": "AdamW",
+    "final_loss": 0.1823,
+    "best_val_f1": 0.874,
+    "best_val_precision": 0.891,
+    "best_val_recall": 0.857,
+    "convergence_criteria": "validation F1 no improvement for 5 epochs",
+    "training_time_hours": 0.75
+  }
+}

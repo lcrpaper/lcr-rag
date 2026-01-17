@@ -1,0 +1,77 @@
+{
+  "pipeline_stage": "deduplication",
+  "status": "completed",
+
+  "input_stats": {
+    "train_candidates": 18234,
+    "dev_candidates": 1823,
+    "test_candidates": 4056
+  },
+
+  "deduplication_methods": {
+    "exact_match": {
+      "description": "Remove exact duplicate query-document pairs",
+      "train_removed": 892,
+      "dev_removed": 89,
+      "test_removed": 198
+    },
+    "near_duplicate": {
+      "description": "MinHash LSH with Jaccard threshold 0.85",
+      "num_bands": 20,
+      "rows_per_band": 5,
+      "jaccard_threshold": 0.85,
+      "train_removed": 1456,
+      "dev_removed": 145,
+      "test_removed": 324
+    },
+    "query_overlap": {
+      "description": "Remove queries appearing in multiple splits",
+      "train_removed": 234,
+      "dev_removed": 23,
+      "test_removed": 52
+    },
+    "semantic_similarity": {
+      "description": "Sentence-BERT embedding cosine > 0.95",
+      "model": "sentence-transformers/all-MiniLM-L6-v2",
+      "threshold": 0.95,
+      "train_removed": 1002,
+      "dev_removed": 101,
+      "test_removed": 218
+    }
+  },
+
+  "output_stats": {
+    "train_final": 10200,
+    "dev_final": 1460,
+    "test_final": 2940,
+    "total_removed": 4715,
+    "removal_rate": 0.196
+  },
+
+  "quality_verification": {
+    "random_sample_checked": 200,
+    "false_positive_rate": 0.015,
+    "notes": "3 legitimate pairs incorrectly removed - acceptable error rate"
+  },
+
+  "conflict_type_distribution_after": {
+    "train": {
+      "L1_temporal": 2893,
+      "L2_numerical": 3312,
+      "L3_entity": 4453,
+      "L4_semantic": 3992
+    },
+    "dev": {
+      "L1_temporal": 290,
+      "L2_numerical": 331,
+      "L3_entity": 445,
+      "L4_semantic": 399
+    },
+    "test": {
+      "L1_temporal": 645,
+      "L2_numerical": 737,
+      "L3_entity": 993,
+      "L4_semantic": 889
+    }
+  }
+}

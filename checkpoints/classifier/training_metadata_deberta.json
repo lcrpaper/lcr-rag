@@ -1,0 +1,118 @@
+{
+  "model_name": "taxonomy_classifier_deberta_v3_large",
+  "created_by": "train_classifier.py",
+
+  "framework": {
+    "pytorch_version": "2.1.0+cu118",
+    "cuda_version": "11.8",
+    "cudnn_version": "8.7.0",
+    "python_version": "3.10.12",
+    "transformers_version": "4.35.0",
+    "numpy_version": "1.24.3"
+  },
+
+  "hardware": {
+    "device_name": "NVIDIA A100-SXM4-80GB",
+    "device_count": 1,
+    "compute_capability": "8.0",
+    "precision": "fp16",
+    "memory_allocated_gb": 18.4,
+    "peak_memory_gb": 22.1
+  },
+
+  "training_config": {
+    "config_file": "configs/classifier_config.yaml",
+    "base_model": "microsoft/deberta-v3-large",
+    "total_epochs": 5,
+    "batch_size": 16,
+    "gradient_accumulation": 2,
+    "effective_batch_size": 32,
+    "learning_rate": 1.0e-5,
+    "warmup_ratio": 0.06,
+    "weight_decay": 0.01,
+    "max_grad_norm": 1.0,
+    "optimizer": "adamw",
+    "scheduler": "linear",
+    "label_smoothing": 0.1,
+    "max_length": 512
+  },
+
+  "training_results": {
+    "final_train_loss": 0.1823,
+    "final_val_loss": 0.2156,
+    "best_macro_f1": 0.889,
+    "per_class_f1": {
+      "L1_temporal": 0.921,
+      "L2_numerical": 0.904,
+      "L3_entity": 0.872,
+      "L4_semantic": 0.859
+    },
+    "confusion_matrix_normalized": {
+      "L1": [0.92, 0.04, 0.02, 0.02],
+      "L2": [0.03, 0.90, 0.04, 0.03],
+      "L3": [0.02, 0.05, 0.87, 0.06],
+      "L4": [0.03, 0.04, 0.07, 0.86]
+    },
+    "best_epoch": 4,
+    "total_steps": 1594,
+    "early_stopping_triggered": false
+  },
+
+  "model_architecture": {
+    "base_model": "microsoft/deberta-v3-large",
+    "classification_head": "Linear(1024, 4)",
+    "pooling": "first_token",
+    "hidden_size": 1024,
+    "num_hidden_layers": 24,
+    "num_attention_heads": 16,
+    "total_parameters": 304000000,
+    "trainable_parameters": 304000000
+  },
+
+  "data": {
+    "dataset_version": "v3",
+    "total_train_examples": 10200,
+    "total_val_examples": 1460,
+    "class_distribution": {
+      "L1_temporal": 0.278,
+      "L2_numerical": 0.247,
+      "L3_entity": 0.233,
+      "L4_semantic": 0.242
+    }
+  },
+
+  "computational_cost": {
+    "total_gpu_hours": 3.0,
+    "total_wall_time_hours": 3.0,
+    "carbon_footprint_kg_co2": 0.11,
+    "estimated_cost_usd": 6.00
+  },
+
+  "reproducibility": {
+    "random_seed": 42,
+    "deterministic_mode": true,
+    "cudnn_deterministic": true,
+    "data_seed": 42
+  },
+
+  "validation": {
+    "paper_reference": "Table 2, Appendix D.1",
+    "expected_macro_f1": 0.89,
+    "tolerance": 0.02,
+    "cross_validated": true,
+    "num_seeds": 5,
+    "seed_results": [0.889, 0.885, 0.892, 0.887, 0.891]
+  },
+
+  "file_info": {
+    "file_size_bytes": 1258291200,
+    "md5_checksum": "c9f2e4a7b3d1f8e5a2c6b9d4e7f1a8c3",
+    "format": "pytorch_state_dict"
+  },
+
+  "comparison_to_baseline": {
+    "baseline_model": "roberta-base",
+    "baseline_macro_f1": 0.82,
+    "improvement": "+7pp (0.82 -> 0.89)"
+  }
+}

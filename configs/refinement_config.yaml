@@ -1,0 +1,45 @@
+model:
+  hidden_dim: 4096
+  bottleneck_dim: 384
+  expansion_factor: null
+  alpha: 0.3
+  t_max: 3
+  epsilon: 0.01
+  target_parameters: 6_300_000
+
+training:
+  learning_rate: 5.0e-5
+  lr_schedule: cosine
+  warmup_ratio: 0.1
+  batch_size: 16
+  gradient_accumulation_steps: 4
+  effective_batch_size: 64
+  num_epochs: 5
+  optimizer: AdamW
+  weight_decay: 0.01
+  gradient_clip_norm: 1.0
+  dropout: 0.1
+
+data:
+  train_size: 12_000
+  val_split: 0.1
+  use_only_conflicts: true
+
+loss:
+  lambda_l2: 0.01
+  lambda_kl: 0.005
+
+evaluation:
+  metrics: [accuracy, exact_match]
+  target_l1_accuracy: 0.724
+  target_l2_accuracy: 0.701
+
+checkpoint:
+  save_best_only: true
+  monitor: val_accuracy
+  mode: max
+
+logging:
+  log_every_n_steps: 50
+  use_wandb: false
+  project_name: lcr-refinement

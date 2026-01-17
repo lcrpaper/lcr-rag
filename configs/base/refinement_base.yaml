@@ -1,0 +1,142 @@
+_config_type: "refinement_base"
+_parent: null
+
+model:
+  name: "refinement_module"
+
+  architecture:
+    type: "bottleneck_mlp"
+    input_dim: 4096
+    bottleneck_dim: 384
+    output_dim: 4096
+    activation: "gelu"
+    use_bias: true
+
+  refinement:
+    alpha: 0.3
+    T_max: 3
+    epsilon: 0.01
+    early_stopping: true
+    momentum: 0.0
+
+  regularization:
+    dropout: 0.1
+    lambda_l2: 0.01
+    lambda_kl: 0.005
+    lambda_entropy: 0.0
+
+  intervention:
+    layer_index: 16
+    intervention_type: "additive"
+    normalize_update: false
+
+  initialization:
+    method: "xavier_uniform"
+    gain: 0.1
+
+training:
+  optimizer:
+    name: "adamw"
+    lr: 5.0e-5
+    betas: [0.9, 0.999]
+    eps: 1.0e-8
+    weight_decay: 0.01
+
+  scheduler:
+    name: "cosine"
+    warmup_ratio: 0.1
+    min_lr: 1.0e-7
+
+  batch:
+    train_batch_size: 16
+    eval_batch_size: 32
+    gradient_accumulation_steps: 4
+
+  epochs: 5
+  max_steps: null
+
+  gradient:
+    max_norm: 1.0
+    clip_type: "norm"
+
+  precision:
+    enabled: true
+    dtype: "float16"
+
+  gradient_checkpointing: true
+
+  checkpoint:
+    save_every_n_steps: 500
+    save_total_limit: 3
+    monitor_metric: "val_accuracy"
+    monitor_mode: "max"
+
+data:
+  train_path: "data/train/"
+  val_path: "data/dev/"
+
+  filter:
+    conflict_only: true
+    min_conflict_score: 0.5
+
+  preprocessing:
+    max_length: 2048
+
+  dataloader:
+    num_workers: 4
+    pin_memory: true
+
+loss:
+  primary:
+    type: "cross_entropy"
+    label_smoothing: 0.0
+
+  auxiliary:
+    l2_update:
+      enabled: true
+      weight: 0.01
+
+    kl_divergence:
+      enabled: true
+      weight: 0.005
+
+    contrastive:
+      enabled: false
+      weight: 0.0
+      temperature: 0.07
+
+evaluation:
+  metrics:
+    - "accuracy"
+    - "exact_match"
+    - "token_f1"
+
+  per_conflict_type: true
+
+  iteration_analysis:
+    enabled: true
+    save_trajectory: false
+
+logging:
+  console:
+    level: "INFO"
+
+  tracking:
+    wandb:
+      enabled: false
+      project: "lcr-refinement"
+
+    tensorboard:
+      enabled: true
+      log_dir: "runs/refinement"
+
+  log_every_n_steps: 50
+
+reproducibility:
+  seed: 42
+  deterministic: true
+
+hardware:
+  device: "cuda"
+  distributed:
+    enabled: false

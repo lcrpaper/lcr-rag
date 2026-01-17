@@ -1,0 +1,76 @@
+{
+  "model_variants": {
+    "deberta_v3_large": {
+      "base_model": "microsoft/deberta-v3-large",
+      "num_labels": 4,
+      "label_names": ["L1_temporal", "L2_numerical", "L3_entity", "L4_semantic"],
+      "hidden_size": 1024,
+      "num_hidden_layers": 24,
+      "vocab_size": 128000,
+      "total_parameters": 304000000,
+      "checkpoint_file": "classifier_deberta_v3_large.pt",
+      "performance": {
+        "macro_f1": 0.889,
+        "l1_f1": 0.921,
+        "l2_f1": 0.904,
+        "l3_f1": 0.872,
+        "l4_f1": 0.859
+      }
+    },
+    "distilbert_base": {
+      "base_model": "distilbert-base-uncased",
+      "num_labels": 4,
+      "label_names": ["L1_temporal", "L2_numerical", "L3_entity", "L4_semantic"],
+      "hidden_size": 768,
+      "num_hidden_layers": 6,
+      "vocab_size": 30522,
+      "total_parameters": 66000000,
+      "checkpoint_file": "classifier_distilbert_base.pt",
+      "performance": {
+        "macro_f1": 0.847,
+        "l1_f1": 0.879,
+        "l2_f1": 0.861,
+        "l3_f1": 0.834,
+        "l4_f1": 0.816
+      }
+    },
+    "tinybert": {
+      "base_model": "huawei-noah/TinyBERT_General_4L_312D",
+      "num_labels": 4,
+      "label_names": ["L1_temporal", "L2_numerical", "L3_entity", "L4_semantic"],
+      "hidden_size": 312,
+      "num_hidden_layers": 4,
+      "intermediate_size": 1200,
+      "vocab_size": 30522,
+      "total_parameters": 14000000,
+      "checkpoint_file": "classifier_tinybert.pt",
+      "performance": {
+        "macro_f1": 0.778,
+        "l1_f1": 0.812,
+        "l2_f1": 0.794,
+        "l3_f1": 0.768,
+        "l4_f1": 0.736
+      }
+    }
+  },
+  "recommended_variant": "deberta_v3_large",
+  "efficiency_variant": "distilbert_base",
+  "lightweight_variant": "tinybert",
+  "training_config": {
+    "learning_rate": 1e-5,
+    "lr_schedule": "linear",
+    "warmup_ratio": 0.06,
+    "batch_size": 16,
+    "gradient_accumulation_steps": 2,
+    "effective_batch_size": 32,
+    "num_epochs": 5,
+    "optimizer": "AdamW",
+    "weight_decay": 0.01,
+    "label_smoothing": 0.1,
+    "max_length": 512
+  },
+  "cascade_routing": {
+    "confidence_threshold": 0.7,
+    "fallback_to_full_verification": true
+  }
+}

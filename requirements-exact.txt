@@ -1,0 +1,80 @@
+# LCR Exact Requirements for Reproducibility
+# ============================================================================
+#
+#
+# WARNING: These versions are tightly coupled. Deviating from these versions may cause:
+#   - Numerical differences in model outputs
+#   - Calibration drift in probability estimates
+#   - Non-reproducible experimental results
+#   - Silent failures or incorrect behavior
+#
+# Installation:
+#   pip install -r requirements-exact.txt   --extra-index-url https://download.pytorch.org/whl/cu118
+#
+# CUDA Toolkit 11.8 must be installed separately.
+# cuDNN 8.7.0+ must be installed and configured.
+#
+# ============================================================================
+
+# PyTorch ecosystem - EXACT versions
+torch==2.1.0+cu118
+torchvision==0.16.0+cu118
+torchaudio==2.1.0+cu118
+
+# Hugging Face - EXACT versions (4.35.x is critical for tokenization consistency)
+transformers==4.35.0
+tokenizers==0.15.0
+datasets==2.14.6
+accelerate==0.24.1
+evaluate==0.4.1
+huggingface-hub==0.19.4
+safetensors==0.4.1
+
+# NumPy/SciPy - EXACT versions (ABI compatibility critical)
+numpy==1.24.3
+scipy==1.11.3
+
+# scikit-learn - EXACT version (affects metrics computation)
+scikit-learn==1.3.1
+
+# Data handling
+pandas==2.0.3
+pyarrow==14.0.1
+
+# Configuration
+pyyaml==6.0.1
+omegaconf==2.3.0
+hydra-core==1.3.2
+python-dotenv==1.0.0
+
+# Retrieval
+rank-bm25==0.2.2
+
+# Progress and logging
+tqdm==4.66.1
+rich==13.6.0
+wandb==0.16.0
+
+# Visualization
+matplotlib==3.8.0
+seaborn==0.13.0
+
+# Testing
+pytest==7.4.3
+pytest-cov==4.1.0
+
+# Metrics
+rouge-score==0.1.2
+
+# ============================================================================
+# VERIFICATION
+# ============================================================================
+#
+# After installation, run environment verification:
+#   python scripts/utils/verify_environment.py --strict
+#
+# Expected output should show all checks passing.
+#
+# If you encounter issues, see PREREQUISITES.md for detailed setup instructions.
+#
+# ============================================================================

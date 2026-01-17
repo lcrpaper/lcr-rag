@@ -1,0 +1,111 @@
+sweep:
+  name: "iteration_count_sweep"
+  description: |
+    Exploration of maximum refinement iterations (T_max).
+    The refinement loop iterates until convergence or T_max:
+      for t = 1 to T_max:
+        h_t = refine(h_{t-1})
+        if ||delta_h|| < epsilon: break
+
+    Hypothesis: Diminishing returns after T=3, marginal gain from T>3.
+
+  parameter: "num_iterations"
+  values: [1, 2, 3, 4, 5, 6, 8, 10]
+  metric: "mean_accuracy"
+  direction: "maximize"
+  secondary_metric: "avg_iterations_used"
+
+base_config:
+  _inherit: "configs/base/refinement_base.yaml"
+
+  model:
+    hidden_dim: 4096
+    bottleneck_dim: 732
+    alpha: 0.3
+    epsilon: 0.01
+
+  training:
+    batch_size: 32
+    learning_rate: 1.0e-5
+    max_epochs: 20
+    seed: 42
+
+expected_results:
+  T_1:
+    mean_accuracy: 61.5
+    avg_iterations_used: 1.0
+    notes: "Single pass - no iterative refinement"
+  T_2:
+    mean_accuracy: 63.7
+    avg_iterations_used: 1.8
+    notes: "Significant improvement over T=1"
+  T_3:
+    mean_accuracy: 65.0
+    avg_iterations_used: 2.3
+    notes: "PAPER SETTING - optimal tradeoff"
+  T_4:
+    mean_accuracy: 65.2
+    avg_iterations_used: 2.5
+    notes: "Marginal improvement (+0.2%)"
+  T_5:
+    mean_accuracy: 65.3
+    avg_iterations_used: 2.6
+    notes: "Diminishing returns (+0.1%)"
+  T_6:
+    mean_accuracy: 65.3
+    avg_iterations_used: 2.7
+    notes: "Plateau reached"
+  T_8:
+    mean_accuracy: 65.3
+    avg_iterations_used: 2.8
+    notes: "No further improvement"
+  T_10:
+    mean_accuracy: 65.2
+    avg_iterations_used: 2.9
+    notes: "Slight degradation (over-refinement)"
+
+optimal:
+  num_iterations: 3
+  notes: |
+    T=3 captures ~99% of possible improvement while
+    maintaining computational efficiency.
+
+    Key insight: Most examples converge by T=3 (epsilon-based early stopping).
+    Only ~3% of examples benefit from T>3.
+
+convergence_statistics:
+  T_3:
+    converged_at_1: 0.12
+    converged_at_2: 0.67
+    converged_at_3: 0.18
+    not_converged: 0.03
+
+  by_conflict_type:
+    L1_temporal:
+      avg_iterations: 2.1
+      convergence_rate_T3: 0.98
+    L2_numerical:
+      avg_iterations: 2.3
+      convergence_rate_T3: 0.97
+    L3_entity:
+      avg_iterations: 2.5
+      convergence_rate_T3: 0.95
+    L4_semantic:
+      avg_iterations: 2.7
+      convergence_rate_T3: 0.92
+
+  interpretation: |
+    Simpler conflicts (L1/L2) converge faster.
+    Complex conflicts (L3/L4) require more iterations but
+    rarely benefit from T>3 due to fundamental limitations.
+
+compute_cost:
+  T_1: 1.0
+  T_2: 1.85
+  T_3: 2.30
+  T_5: 2.65
+  T_10: 2.95
+
+  conclusion: |
+    T=3 provides best accuracy/compute tradeoff.
+    Going beyond T=3 adds compute but negligible accuracy.

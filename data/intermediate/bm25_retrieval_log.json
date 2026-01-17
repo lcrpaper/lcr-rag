@@ -1,0 +1,62 @@
+{
+  "pipeline_stage": "bm25_retrieval",
+  "status": "completed",
+
+  "bm25_config": {
+    "implementation": "rank_bm25",
+    "k1": 0.9,
+    "b": 0.4,
+    "tokenizer": "nltk_word_tokenize",
+    "stemmer": "porter",
+    "stopwords": "nltk_english",
+    "min_doc_length": 20,
+    "max_doc_length": 512
+  },
+
+  "corpus_stats": {
+    "total_documents": 2847593,
+    "unique_tokens": 847291,
+    "avg_document_length": 287.4,
+    "median_document_length": 264,
+    "index_size_gb": 4.2
+  },
+
+  "retrieval_stats": {
+    "total_queries": 19379,
+    "avg_retrieval_time_ms": 12.3,
+    "documents_per_query": 10,
+    "documents_selected_per_query": 3.2
+  },
+
+  "selection_criteria": {
+    "method": "conflict_signal_ranking",
+    "min_bm25_score": 15.0,
+    "max_similarity_to_other_docs": 0.85,
+    "require_date_difference": true,
+    "date_difference_threshold_days": 30
+  },
+
+  "output_files": [
+    "intermediate/retrieved_candidates_train.jsonl",
+    "intermediate/retrieved_candidates_dev.jsonl",
+    "intermediate/retrieved_candidates_test.jsonl"
+  ],
+
+  "version_history": {
+    "v1": {
+      "k1": 1.2,
+      "b": 0.75,
+      "notes": "Default parameters - poor recall on temporal conflicts"
+    },
+    "v2": {
+      "k1": 0.9,
+      "b": 0.5,
+      "notes": "Improved but entity conflicts still missed"
+    },
+    "v3": {
+      "k1": 0.9,
+      "b": 0.4,
+      "notes": "PAPER VERSION - optimal after grid search"
+    }
+  }
+}

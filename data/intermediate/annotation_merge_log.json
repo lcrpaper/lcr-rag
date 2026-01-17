@@ -1,0 +1,74 @@
+{
+  "pipeline_stage": "annotation_merge",
+  "status": "completed",
+
+  "annotation_sources": {
+    "batch_1": {
+      "annotators": ["ann_01", "ann_02"],
+      "examples": 5000
+    },
+    "batch_2": {
+      "annotators": ["ann_02", "ann_03"],
+      "examples": 5000
+    },
+    "batch_3": {
+      "annotators": ["ann_01", "ann_03", "ann_04"],
+      "examples": 4650
+    },
+    "calibration": {
+      "annotators": ["expert_lead"],
+      "examples": 500,
+      "purpose": "gold standard for IAA calculation"
+    }
+  },
+
+  "merge_strategy": {
+    "conflict_detection": {
+      "method": "majority_vote",
+      "threshold": 0.5,
+      "tie_breaker": "expert_review"
+    },
+    "conflict_type": {
+      "method": "majority_vote",
+      "threshold": 0.66,
+      "tie_breaker": "most_confident_annotator"
+    },
+    "gold_answer": {
+      "method": "expert_selection",
+      "fallback": "longest_answer"
+    }
+  },
+
+  "disagreement_stats": {
+    "conflict_detection_disagreements": 423,
+    "conflict_type_disagreements": 687,
+    "disagreements_resolved_by_expert": 312,
+    "examples_discarded_no_consensus": 89
+  },
+
+  "inter_annotator_agreement": {
+    "conflict_detection_kappa": 0.847,
+    "conflict_type_kappa": 0.812,
+    "by_conflict_type": {
+      "L1_temporal": 0.891,
+      "L2_numerical": 0.867,
+      "L3_entity": 0.798,
+      "L4_semantic": 0.756
+    }
+  },
+
+  "final_dataset_stats": {
+    "total_examples": 14600,
+    "train": 10200,
+    "dev": 1460,
+    "test": 2940,
+    "natural_percentage": 66,
+    "augmented_percentage": 34
+  },
+
+  "output_files": [
+    "train/conflicts.jsonl",
+    "dev/conflicts.jsonl",
+    "test/conflicts.jsonl"
+  ]
+}

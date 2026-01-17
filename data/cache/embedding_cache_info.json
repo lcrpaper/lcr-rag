@@ -1,0 +1,58 @@
+{
+  "cache_info": {
+    "purpose": "Pre-computed embeddings for fast inference"
+  },
+
+  "embedding_models": {
+    "llama3_8b": {
+      "model_id": "meta-llama/Meta-Llama-3-8B",
+      "layer_extracted": 16,
+      "hidden_dim": 4096,
+      "precision": "fp16",
+      "cache_files": [
+        "llama3_train_embeddings.pt",
+        "llama3_dev_embeddings.pt",
+        "llama3_test_embeddings.pt"
+      ],
+      "total_size_gb": 12.4
+    },
+    "sentence_bert": {
+      "model_id": "sentence-transformers/all-MiniLM-L6-v2",
+      "hidden_dim": 384,
+      "precision": "fp32",
+      "cache_files": [
+        "sbert_train_embeddings.pt",
+        "sbert_dev_embeddings.pt",
+        "sbert_test_embeddings.pt"
+      ],
+      "total_size_gb": 0.8,
+      "purpose": "deduplication and similarity search"
+    }
+  },
+
+  "cache_structure": {
+    "format": "PyTorch tensor dict",
+    "keys": ["embeddings", "ids", "metadata"],
+    "compression": "none",
+    "memory_mapping": true
+  },
+
+  "generation_config": {
+    "batch_size": 32,
+    "max_length": 512,
+    "pooling": "mean",
+    "normalize": true,
+    "device": "cuda:0"
+  },
+
+  "validation": {
+    "embedding_dim_verified": true,
+    "nan_check_passed": true,
+    "id_alignment_verified": true
+  },
+
+  "notes": [
+    "Embeddings regenerated after BM25 v3 update",
+    "Memory-mapped for fast loading during training"
+    ]
+}

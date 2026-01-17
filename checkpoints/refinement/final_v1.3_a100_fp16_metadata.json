@@ -1,0 +1,124 @@
+{
+  "model_name": "refinement_module",
+  "created_by": "train_refinement.py",
+
+  "framework": {
+    "pytorch": "2.1.0+cu118",
+    "cuda": "11.8",
+    "cudnn": "8.7.0",
+    "python": "3.10.12",
+    "transformers": "4.35.0",
+    "numpy": "1.24.3"
+  },
+
+  "hardware": {
+    "device_name": "NVIDIA A100-SXM4-80GB",
+    "device_count": 2,
+    "compute_capability": "8.0",
+    "precision": "fp16",
+    "tensor_cores_enabled": true,
+    "gradient_checkpointing": true,
+    "memory_allocated_gb": 32.8,
+    "peak_memory_gb": 48.2
+  },
+
+  "training_config": {
+    "config_file": "configs/refinement_config.yaml",
+    "base_config": "configs/base/refinement_base.yaml",
+    "environment": "configs/environments/cloud_4xa100.yaml",
+    "total_epochs": 5,
+    "batch_size": 16,
+    "gradient_accumulation": 4,
+    "effective_batch_size": 64,
+    "learning_rate": 5.0e-5,
+    "warmup_ratio": 0.1,
+    "weight_decay": 0.01,
+    "max_grad_norm": 1.0,
+    "optimizer": "adamw",
+    "scheduler": "cosine",
+    "dropout": 0.1,
+    "lambda_l2": 0.01,
+    "lambda_kl": 0.005
+  },
+
+  "training_results": {
+    "final_train_loss": 0.2891,
+    "final_val_loss": 0.3142,
+    "best_val_l1_accuracy": 0.724,
+    "best_val_l2_accuracy": 0.701,
+    "best_val_l3_accuracy": 0.438,
+    "best_val_l4_accuracy": 0.312,
+    "best_epoch": 5,
+    "total_steps": 9375,
+    "convergence_step": 8200,
+    "early_stopping_triggered": false,
+    "average_refinement_iterations": 2.3
+  },
+
+  "model_architecture": {
+    "type": "Bottleneck MLP",
+    "input_dim": 4096,
+    "bottleneck_dim": 768,
+    "output_dim": 4096,
+    "activation": "gelu",
+    "alpha": 0.3,
+    "T_max": 3,
+    "epsilon": 0.01,
+    "total_parameters": 6296320,
+    "trainable_parameters": 6296320,
+    "layer_details": {
+      "down_proj": {"in": 4096, "out": 768, "params": 3146496},
+      "up_proj": {"in": 768, "out": 4096, "params": 3149824}
+    }
+  },
+
+  "data": {
+    "total_train_examples": 10200,
+    "total_val_examples": 1460,
+    "conflict_only_training": true,
+    "max_seq_length": 2048,
+    "conflict_types": ["temporal", "numerical", "entity", "semantic"]
+  },
+
+  "computational_cost": {
+    "total_gpu_hours": 12.0,
+    "total_wall_time_hours": 6.0,
+    "carbon_footprint_kg_co2": 0.43,
+    "estimated_cost_usd": 24.00
+  },
+
+  "reproducibility": {
+    "random_seed": 42,
+    "deterministic_mode": true,
+    "cudnn_deterministic": true,
+    "cudnn_benchmark": false,
+    "data_seed": 42
+  },
+
+  "validation": {
+    "expected_l1_accuracy": 0.724,
+    "expected_l2_accuracy": 0.701,
+    "tolerance": 0.02,
+    "benchmark_dataset": "data/benchmarks/*/dev.jsonl",
+    "cross_validated": true,
+    "num_seeds": 5,
+    "seed_results_l1": [0.724, 0.718, 0.731, 0.720, 0.726],
+    "seed_results_l2": [0.701, 0.695, 0.708, 0.699, 0.702]
+  },
+
+  "file_info": {
+    "file_size_bytes": 25165824,
+    "md5_checksum": "b8e3f1a9d4c7e2b6f5a1d8c3e9f2a7b4",
+    "compression": "none",
+    "format": "pytorch_state_dict"
+  },
+
+  "history": [
+    {
+      "changes": ["Added KL regularization", "Improved L2 accuracy"]
+    },
+    {
+      "changes": ["Initial bottleneck architecture"]
+    }
+  ]
+}

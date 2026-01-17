@@ -1,0 +1,152 @@
+{
+  "meta": {
+    "description": "Stratified analysis of L2 (numerical) conflicts by magnitude and type",
+    "paper_reference": "Section 5.1, Table 3 footnote"
+  },
+
+  "magnitude_bins": {
+    "small_diff": {
+      "criteria": "relative_difference < 10%",
+      "count": 612,
+      "percentage": 18.8,
+      "lcr_accuracy": 0.634,
+      "baseline_accuracy": 0.512,
+      "examples": [
+        {"query": "What is the population?", "values": ["3.2 million", "3.1 million"]},
+        {"query": "How tall is the building?", "values": ["443m", "438m"]}
+      ]
+    },
+    "medium_diff": {
+      "criteria": "10% <= relative_difference < 50%",
+      "count": 1423,
+      "percentage": 43.6,
+      "lcr_accuracy": 0.712,
+      "baseline_accuracy": 0.548,
+      "examples": [
+        {"query": "What was the revenue?", "values": ["$2.3 billion", "$1.8 billion"]},
+        {"query": "How many employees?", "values": ["45,000", "32,000"]}
+      ]
+    },
+    "large_diff": {
+      "criteria": "relative_difference >= 50%",
+      "count": 1229,
+      "percentage": 37.6,
+      "lcr_accuracy": 0.756,
+      "baseline_accuracy": 0.567,
+      "examples": [
+        {"query": "What is the distance?", "values": ["384,400 km", "150 million km"]},
+        {"query": "How much does it cost?", "values": ["$50", "$200"]}
+      ]
+    }
+  },
+
+  "numerical_type_breakdown": {
+    "counts_quantities": {
+      "count": 987,
+      "percentage": 30.2,
+      "lcr_accuracy": 0.698,
+      "notes": "Population, employees, items sold"
+    },
+    "measurements": {
+      "count": 756,
+      "percentage": 23.2,
+      "lcr_accuracy": 0.723,
+      "notes": "Height, weight, distance, area"
+    },
+    "financial": {
+      "count": 612,
+      "percentage": 18.8,
+      "lcr_accuracy": 0.687,
+      "notes": "Revenue, prices, market cap"
+    },
+    "percentages_rates": {
+      "count": 534,
+      "percentage": 16.4,
+      "lcr_accuracy": 0.712,
+      "notes": "Growth rates, percentages, ratios"
+    },
+    "rankings_ordinals": {
+      "count": 375,
+      "percentage": 11.5,
+      "lcr_accuracy": 0.678,
+      "notes": "Rankings, positions, ordinal values"
+    }
+  },
+
+  "unit_consistency": {
+    "same_units": {
+      "count": 2456,
+      "percentage": 75.3,
+      "lcr_accuracy": 0.718
+    },
+    "different_units_convertible": {
+      "count": 623,
+      "percentage": 19.1,
+      "lcr_accuracy": 0.689,
+      "examples": ["km vs miles", "kg vs lbs", "°C vs °F"]
+    },
+    "incompatible_units": {
+      "count": 185,
+      "percentage": 5.7,
+      "lcr_accuracy": 0.623,
+      "notes": "Often indicates scope difference, not true numerical conflict"
+    }
+  },
+
+  "precision_analysis": {
+    "exact_values": {
+      "count": 1234,
+      "percentage": 37.8,
+      "lcr_accuracy": 0.734,
+      "notes": "Both documents give exact numbers"
+    },
+    "ranges_vs_exact": {
+      "count": 876,
+      "percentage": 26.8,
+      "lcr_accuracy": 0.698,
+      "notes": "One range, one exact"
+    },
+    "both_ranges": {
+      "count": 456,
+      "percentage": 14.0,
+      "lcr_accuracy": 0.656,
+      "notes": "Both documents give ranges"
+    },
+    "approximations": {
+      "count": 698,
+      "percentage": 21.4,
+      "lcr_accuracy": 0.678,
+      "notes": "At least one uses 'about', 'approximately', 'roughly'"
+    }
+  },
+
+  "error_analysis": {
+    "common_failure_modes": {
+      "implicit_scope": {
+        "description": "Different scopes not recognized (e.g., city vs metro)",
+        "count": 89,
+        "percentage_of_errors": 28.4
+      },
+      "outdated_vs_current": {
+        "description": "Both values correct at different times",
+        "count": 67,
+        "percentage_of_errors": 21.4
+      },
+      "rounding_differences": {
+        "description": "Values differ due to rounding",
+        "count": 54,
+        "percentage_of_errors": 17.3
+      },
+      "unit_confusion": {
+        "description": "Units not properly handled",
+        "count": 43,
+        "percentage_of_errors": 13.7
+      },
+      "partial_information": {
+        "description": "One value is subset of other",
+        "count": 60,
+        "percentage_of_errors": 19.2
+      }
+    }
+  }
+}

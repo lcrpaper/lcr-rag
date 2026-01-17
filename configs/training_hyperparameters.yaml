@@ -1,0 +1,107 @@
+detector:
+  learning_rate: 2.0e-5
+  lr_schedule: cosine
+  warmup_ratio: 0.1
+
+  batch_size: 32
+  gradient_accumulation_steps: 2
+  effective_batch_size: 64
+
+  epochs: 3
+
+  optimizer: adamw
+  optimizer_params:
+    weight_decay: 0.01
+    betas: [0.9, 0.999]
+    eps: 1.0e-8
+
+  gradient_clipping: 1.0
+  dropout: 0.1
+
+  detection_threshold: 0.6
+
+  mixed_precision: fp16
+  gradient_checkpointing: false
+
+  seed: 42
+
+refinement:
+  learning_rate: 5.0e-5
+  lr_schedule: cosine
+  warmup_ratio: 0.1
+
+  batch_size: 16
+  gradient_accumulation_steps: 4
+  effective_batch_size: 64
+
+  epochs: 5
+
+  optimizer: adamw
+  optimizer_params:
+    weight_decay: 0.01
+    betas: [0.9, 0.999]
+    eps: 1.0e-8
+
+  gradient_clipping: 1.0
+  dropout: 0.1
+
+  alpha: 0.3
+  lambda_1: 0.01
+  lambda_2: 0.005
+  T_max: 3
+  epsilon: 0.01
+
+  intervention_layer: 16
+
+  mixed_precision: fp16
+  gradient_checkpointing: true
+
+  seed: 42
+
+classifier:
+  learning_rate: 1.0e-5
+  lr_schedule: linear
+  warmup_ratio: 0.06
+
+  batch_size: 16
+  gradient_accumulation_steps: 2
+  effective_batch_size: 32
+
+  epochs: 5
+
+  optimizer: adamw
+  optimizer_params:
+    weight_decay: 0.01
+    betas: [0.9, 0.999]
+    eps: 1.0e-8
+
+  gradient_clipping: 1.0
+  dropout: 0.1
+
+  confidence_threshold: 0.7
+
+  base_model: microsoft/deberta-v3-large
+  num_classes: 4
+
+  mixed_precision: fp16
+  gradient_checkpointing: false
+
+  seed: 42
+
+common:
+  device: cuda
+  num_workers: 4
+  pin_memory: true
+
+  logging_steps: 50
+  eval_steps: 100
+  save_steps: 500
+  save_total_limit: 3
+
+  eval_strategy: steps
+  load_best_model_at_end: true
+  metric_for_best_model: accuracy
+  greater_is_better: true
+
+  early_stopping_patience: 3
+  early_stopping_threshold: 0.001

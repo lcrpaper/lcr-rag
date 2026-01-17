@@ -1,0 +1,43 @@
+model:
+  hidden_dim: 4096
+  reduction_factor: 16
+  intermediate_dim: 8192
+  threshold: 0.6
+  target_parameters: 2_100_000
+
+training:
+  learning_rate: 2.0e-5
+  lr_schedule: cosine
+  warmup_ratio: 0.1
+  batch_size: 32
+  gradient_accumulation_steps: 2
+  effective_batch_size: 64
+  num_epochs: 3
+  optimizer: AdamW
+  weight_decay: 0.01
+  gradient_clip_norm: 1.0
+  dropout: 0.1
+
+data:
+  train_size: 15_000
+  val_split: 0.1
+  conflict_ratio: 0.34
+
+loss:
+  function: binary_crossentropy
+
+evaluation:
+  metrics: [f1, precision, recall, accuracy]
+  target_f1: 0.87
+  target_precision: 0.89
+  target_recall: 0.85
+
+checkpoint:
+  save_best_only: true
+  monitor: val_f1
+  mode: max
+
+logging:
+  log_every_n_steps: 100
+  use_wandb: false
+  project_name: lcr-detector

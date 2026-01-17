@@ -1,0 +1,307 @@
+# LCR Research Project - Full Dependencies
+# ============================================================================
+#
+# This file contains ALL dependencies accumulated during the research project.
+# Not all packages are required for basic reproduction - see requirements-minimal.txt
+# for a minimal working set.
+#
+# Installation:
+#   pip install -r requirements.txt
+#
+# For GPU support (CUDA 11.8):
+#   pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu118
+#
+# For GPU support (CUDA 12.1):
+#   pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu121
+#
+# ============================================================================
+
+# ============================================================================
+# CORE DEEP LEARNING FRAMEWORK
+# ============================================================================
+
+# PyTorch ecosystem
+torch>=2.1.0
+torchvision>=0.16.0
+torchaudio>=2.1.0
+
+# Hugging Face ecosystem
+transformers>=4.35.0,<4.40.0  # Pin range for compatibility
+tokenizers>=0.15.0
+datasets>=2.14.0
+accelerate>=0.24.0
+evaluate>=0.4.0
+huggingface-hub>=0.19.0
+safetensors>=0.4.0
+
+# Parameter-efficient fine-tuning
+peft>=0.6.0
+bitsandbytes>=0.41.0  # Quantization support
+optimum>=1.14.0
+
+# ============================================================================
+# ADDITIONAL ML FRAMEWORKS (for baselines and experiments)
+# ============================================================================
+
+# TensorFlow (for TFRecord support and some baselines)
+tensorflow>=2.14.0
+tensorflow-datasets>=4.9.0
+
+# Scikit-learn
+scikit-learn>=1.3.0
+scipy>=1.11.0
+
+# Gradient boosting (for classifier ablations)
+xgboost>=2.0.0
+lightgbm>=4.1.0
+catboost>=1.2.0
+
+# ============================================================================
+# NLP LIBRARIES
+# ============================================================================
+
+# SpaCy and language models
+spacy>=3.7.0
+# python -m spacy download en_core_web_sm
+# python -m spacy download en_core_web_lg
+
+# NLTK
+nltk>=3.8.0
+
+# Sentence transformers (for dense retrieval experiments)
+sentence-transformers>=2.2.0
+
+# Other NLP tools
+stanza>=1.6.0
+flair>=0.13.0
+
+# Tokenization
+sentencepiece>=0.1.99
+tiktoken>=0.5.0  # OpenAI tokenizer
+sacremoses>=0.1.0
+
+# ============================================================================
+# RETRIEVAL & SEARCH
+# ============================================================================
+
+# BM25 implementations
+rank-bm25>=0.2.2
+pyserini>=0.22.0  # Requires Java 11+
+
+# Vector databases and search
+faiss-cpu>=1.7.4
+# faiss-gpu>=1.7.4  # Uncomment for GPU support
+chromadb>=0.4.0
+qdrant-client>=1.6.0
+pinecone-client>=2.2.0
+
+# Elasticsearch
+elasticsearch>=8.10.0
+
+# ============================================================================
+# API CLIENTS (for baselines using external models)
+# ============================================================================
+
+# OpenAI
+openai>=1.3.0
+
+# Anthropic
+anthropic>=0.7.0
+
+# Cohere
+cohere>=4.37.0
+
+# Google
+google-generativeai>=0.3.0
+
+# Together AI
+together>=0.2.0
+
+# ============================================================================
+# DATA PROCESSING
+# ============================================================================
+
+# Core data handling
+numpy>=1.24.0,<2.0.0
+pandas>=2.0.0
+polars>=0.19.0  # Fast DataFrame alternative
+
+# File formats
+pyarrow>=14.0.0
+fastparquet>=2023.10.0
+h5py>=3.10.0
+lmdb>=1.4.0
+msgpack>=1.0.0
+orjson>=3.9.0  # Fast JSON parsing
+
+# Compression
+python-lz4>=4.3.0
+zstandard>=0.22.0
+
+# Data validation
+pydantic>=2.5.0
+
+# MinHash deduplication
+datasketch>=1.6.0
+
+# ============================================================================
+# EXPERIMENT TRACKING & LOGGING
+# ============================================================================
+
+# Weights & Biases
+wandb>=0.16.0
+
+# MLflow
+mlflow>=2.9.0
+
+# TensorBoard
+tensorboard>=2.14.0
+tensorboardX>=2.6.0
+
+# Aim
+aim>=3.18.0
+
+# ============================================================================
+# CONFIGURATION & CLI
+# ============================================================================
+
+# Configuration management
+hydra-core>=1.3.0
+omegaconf>=2.3.0
+python-dotenv>=1.0.0
+pyyaml>=6.0.0
+toml>=0.10.0
+
+# CLI tools
+click>=8.1.0
+typer>=0.9.0
+fire>=0.5.0
+rich>=13.6.0  # Rich console output
+
+# ============================================================================
+# VISUALIZATION
+# ============================================================================
+
+# Plotting
+matplotlib>=3.8.0
+seaborn>=0.13.0
+plotly>=5.18.0
+
+# Jupyter
+jupyter>=1.0.0
+jupyterlab>=4.0.0
+ipywidgets>=8.1.0
+
+# Tables
+tabulate>=0.9.0
+
+# ============================================================================
+# EVALUATION & METRICS
+# ============================================================================
+
+# Text metrics
+rouge-score>=0.1.2
+sacrebleu>=2.3.0
+bert-score>=0.3.13
+
+# Statistical testing
+statsmodels>=0.14.0
+bootstrapped>=0.0.2
+
+# ============================================================================
+# PROFILING & OPTIMIZATION
+# ============================================================================
+
+# Profiling
+memory-profiler>=0.61.0
+py-spy>=0.3.14
+line-profiler>=4.1.0
+
+# GPU monitoring
+nvidia-ml-py3>=7.352.0
+gpustat>=1.1.0
+
+# Model optimization
+onnx>=1.15.0
+onnxruntime>=1.16.0
+
+# ============================================================================
+# INFERENCE OPTIMIZATION
+# ============================================================================
+
+# vLLM for fast inference
+vllm>=0.2.0
+
+# Triton
+triton>=2.1.0
+
+# ============================================================================
+# DISTRIBUTED TRAINING
+# ============================================================================
+
+# DeepSpeed
+deepspeed>=0.12.0
+
+# Fairscale
+fairscale>=0.4.0
+
+# Ray
+ray[default]>=2.8.0
+
+# ============================================================================
+# TESTING & QUALITY
+# ============================================================================
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-xdist>=3.4.0
+hypothesis>=6.91.0
+
+# Code quality
+black>=23.11.0
+isort>=5.12.0
+flake8>=6.1.0
+mypy>=1.7.0
+ruff>=0.1.0
+
+# Pre-commit
+pre-commit>=3.6.0
+
+# Documentation
+sphinx>=7.2.0
+sphinx-rtd-theme>=2.0.0
+mkdocs>=1.5.0
+
+# ============================================================================
+# UTILITIES
+# ============================================================================
+
+# Progress bars
+tqdm>=4.66.0
+enlighten>=1.12.0
+
+# Caching
+diskcache>=5.6.0
+cachetools>=5.3.0
+joblib>=1.3.0
+
+# File utilities
+filelock>=3.13.0
+watchdog>=3.0.0
+
+# HTTP
+requests>=2.31.0
+httpx>=0.25.0
+aiohttp>=3.9.0
+
+# Serialization
+dill>=0.3.7
+cloudpickle>=3.0.0
+
+# Hashing
+xxhash>=3.4.0
+
+# Misc
+more-itertools>=10.1.0
+attrs>=23.1.0

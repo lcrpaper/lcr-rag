@@ -1,0 +1,35 @@
+_schema_version: "1.0"
+_config_type: "ablation"
+_extends: "configs/base/refinement_base.yaml"
+
+experiment:
+  name: "refinement_iterations_ablation"
+  description: "Effect of T_max (maximum refinement iterations) on performance"
+  hypothesis: "More iterations improve accuracy on harder conflicts but with diminishing returns"
+
+sweep:
+  method: "grid"
+  metric:
+    name: "val_accuracy"
+    goal: "maximize"
+
+  parameters:
+    model.refinement.T_max:
+      values: [1, 2, 3, 4, 5, 6, 8, 10]
+
+    model.refinement.alpha:
+      value: 0.3
+
+    model.refinement.epsilon:
+      value: 0.01
+
+analysis:
+  per_iteration_metrics: true
+
+  convergence:
+    track_update_norms: true
+    track_accuracy_per_step: true
+
+  breakdown:
+    by_conflict_type: true
+    by_difficulty: true

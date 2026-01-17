@@ -1,0 +1,93 @@
+sweep:
+  name: "alpha_coefficient_sweep"
+  description: |
+    Systematic exploration of alpha (interpolation coefficient) values.
+    Alpha controls the strength of refinement updates:
+      h_{t+1} = (1 - alpha) * h_t + alpha * delta_h_t
+
+    Hypothesis: Optimal alpha balances correction strength vs signal preservation.
+    Expected pattern: Inverted U-shape with peak around alpha=0.3
+
+  parameter: "alpha"
+  values: [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
+  metric: "mean_accuracy"
+  direction: "maximize"
+
+base_config:
+  _inherit: "configs/base/refinement_base.yaml"
+
+  model:
+    hidden_dim: 4096
+    bottleneck_dim: 732
+    num_iterations: 3
+
+  training:
+    batch_size: 32
+    learning_rate: 1.0e-5
+    max_epochs: 20
+    seed: 42
+
+  data:
+    train_path: "data/train/"
+    dev_path: "data/dev/"
+
+resources:
+  gpus_per_trial: 1
+  gpu_type: "A100-80GB"
+  max_concurrent: 4
+  estimated_time_per_trial: "45 minutes"
+  total_estimated_time: "~4 hours"
+
+expected_results:
+  alpha_0.05:
+    mean_accuracy: 59.8
+    interpretation: "Severe under-correction"
+  alpha_0.10:
+    mean_accuracy: 62.2
+    interpretation: "Under-correction"
+  alpha_0.15:
+    mean_accuracy: 63.5
+    interpretation: "Improving"
+  alpha_0.20:
+    mean_accuracy: 63.7
+    interpretation: "Sub-optimal"
+  alpha_0.25:
+    mean_accuracy: 64.6
+    interpretation: "Near-optimal"
+  alpha_0.30:
+    mean_accuracy: 65.0
+    interpretation: "OPTIMAL"
+  alpha_0.35:
+    mean_accuracy: 64.8
+    interpretation: "Slight over-correction"
+  alpha_0.40:
+    mean_accuracy: 64.4
+    interpretation: "Over-correction"
+  alpha_0.45:
+    mean_accuracy: 63.5
+    interpretation: "Significant over-correction"
+  alpha_0.50:
+    mean_accuracy: 62.9
+    interpretation: "Severe over-correction"
+
+optimal:
+  alpha: 0.3
+  stable_range: [0.25, 0.35]
+  notes: |
+    Results are relatively stable in the [0.25, 0.35] range.
+    Deviations beyond ±0.1 from optimal show degradation.
+    Pattern confirms inverted U-shape hypothesis.
+
+execution:
+  command: |
+    python src/training/train_refinement.py \
+      --config configs/experiments/sweeps/alpha_sweep.yaml \
+      --alpha {alpha} \
+      --output-dir experiments/runs/alpha_sweep/alpha_{alpha}/ \
+      --seed 42
+
+  orchestrator: "scripts/training/run_hyperparameter_sweep.py"
+  orchestrator_args:
+    config: "configs/experiments/sweeps/alpha_sweep.yaml"
+    output_dir: "experiments/runs/alpha_sweep/"
+    parallel: 4
